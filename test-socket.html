@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Socket.IO Test</title>
+  <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+</head>
+<body>
+  <h1>Socket.IO Client Test</h1>
+  <script>
+    const socket = io("http://localhost:4000");
+
+    socket.on("connect", () => {
+      console.log(`Connected: ${socket.id}`);
+    });
+
+    socket.emit("joinRoom", { roomId: "testRoom", userId: "user1" });
+
+    socket.on("userJoined", (data) => {
+      console.log(`User joined: ${data.userId}`);
+    });
+
+    socket.on("newMessage", (data) => {
+      console.log(`New message from ${data.userId}: ${data.message}`);
+    });
+  </script>
+</body>
+</html>

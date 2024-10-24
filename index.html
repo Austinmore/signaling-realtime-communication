@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebRTC Client with PeerJS</title>
+    <!-- Include PeerJS client library using CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/peerjs@1.3.2/dist/peerjs.min.js"></script>
+</head>
+<body>
+    <h1>PeerJS WebRTC Test</h1>
+
+    <input type="text" id="peerIdInput" placeholder="Enter peer ID to connect">
+    <button id="connectButton">Connect to Peer</button>
+
+    <!-- The script that handles PeerJS client interaction -->
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            // Create a new peer with the PeerJS server
+            const peer = new Peer(null, {
+                host: 'localhost',
+                port: 9000,
+                path: '/peerjs',
+                debug: 3, // Verbosity for debugging
+            });
+
+            peer.on('open', function (id) {
+                console.log('My peer ID is: ' + id);
+            });
+
+            // Listen for incoming connections from other peers
+            peer.on('connection', function (conn) {
+                console.log('Connected to another peer:', conn.peer);
+                
+                // Handle data received
+                conn.on('data', function (data) {
+                    console.log('Data received:', data);
+                });
+
+                // Sending data
+                conn.send('Hello from this peer!');
+            });
+
+            // Example of initiating a connection
+            document.getElementById('connectButton').addEventListener('click', () => {
+                const otherPeerId = document.getElementById('peerIdInput').value;
+                const conn = peer.connect(otherPeerId);
+
+                conn.on('open', () => {
+                    console.log('Connection opened with:', otherPeerId);
+                    conn.send('Hi from the initiating peer!');
+                });
+
+                conn.on('data', (data) => {
+                    console.log('Data received from other peer:', data);
+                });
+            });
+        });
+    </script>
+</body>
+</html>

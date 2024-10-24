@@ -10,7 +10,7 @@ import {
   import { Logger } from '@nestjs/common';
   import { RoomService } from './room.service';
   
-  @WebSocketGateway({ cors: { origin: '*' } })
+  @WebSocketGateway({ port: 4000, cors: { origin: '*' } })
   export class WebSocketService implements OnGatewayConnection, OnGatewayDisconnect {
     private logger: Logger = new Logger('WebSocketService');
   

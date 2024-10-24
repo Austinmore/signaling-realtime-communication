@@ -11,6 +11,12 @@ async function bootstrap() {
   // Create the Express app
   const expressApp = express();
 
+  // Add request logging middleware to log all incoming requests
+  expressApp.use((req, res, next) => {
+    console.log(`Incoming request: ${req.method} ${req.url}`);
+    next();
+  });
+
   // Create a separate HTTP server for PeerJS
   const peerHttpServer = http.createServer(expressApp);
 
@@ -51,7 +57,9 @@ async function bootstrap() {
   const peerServer = ExpressPeerServer(peerHttpServer, {
     path: '/peerjs',
   });
+  
   expressApp.use('/peerjs', peerServer);
+
 
   // Start the NestJS app server
   await app.listen(4000);

@@ -17,11 +17,11 @@
     <script>
         document.addEventListener("DOMContentLoaded", () => {
             // Create a new peer with the PeerJS server
-            const peer = new Peer(null, {
+            const peer = new Peer(peer-id, {
                 host: 'localhost',
                 port: 9000,
                 path: '/peerjs',
-                debug: 3, // Verbosity for debugging
+                secure: false
             });
 
             peer.on('open', function (id) {
